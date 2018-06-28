@@ -40,7 +40,6 @@ $(document).ready(function () {
                 $('#successMessage').empty();
                 $('#successMessage').appendData(data);
             },
-
             error: function (errors) {
                 $('#successMessage').empty();
                 $('#successMessage').append(errors.responseText);
