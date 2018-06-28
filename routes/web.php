@@ -11,10 +11,5 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-
-Route::get('apiDel','ApiDeliveryController@index');
-Route::get('apiDel/show','ApiDeliveryController@show');
+Route::get('/', 'ApiDeliveryController@index');
+Route::post('apiDelGetToken', 'ApiDeliveryController@getToken');
