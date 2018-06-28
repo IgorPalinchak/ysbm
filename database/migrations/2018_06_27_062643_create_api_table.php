@@ -13,9 +13,15 @@ class CreateApiTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('api_settigs');
         Schema::create('api_settigs', function (Blueprint $table) {
-            $table->text('login');
+            $table->increments('id');
+//            $table->text('login');
+            $table->string('login')->unique();
             $table->text('password');
+            $table->longText('token_data');
+            $table->timestamps();
+
         });
     }
 

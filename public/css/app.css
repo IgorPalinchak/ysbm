@@ -10572,3 +10572,11 @@ body {
   }
 }
 
+.alert {
+  word-break: break-all;
+}
+
+.lead {
+  word-break: break-all;
+}
+

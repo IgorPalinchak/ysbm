@@ -2,6 +2,8 @@
 
 return [
 
+    'ysbm_api_url'=>'https://api.shipments.test-y-sbm.com/',
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

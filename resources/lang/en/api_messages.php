@@ -17,6 +17,7 @@ return [
     'token_string' => 'Token: :auth_token',
     'api_auth_data' => 'Enter your API-auth data:',
     'enter'=>'Get Token!',
-    'token_reseived'=>'Your AUTH_token:    :auth_token'
+    'token_reseived'=>'Your AUTH_token:    :auth_token',
+    'guzle_access_error'=>'Access error:  code - '
 
 ];

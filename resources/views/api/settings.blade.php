@@ -1,10 +1,10 @@
 @extends('main')
 
 @section('content')
-    @if ($settigs_data)
+    @if ($settigsData)
         <div class="jumbotron">
             <h1>@lang('api_messages.welcome')</h1>
-            <p class="lead">@lang('api_messages.token_string', ['auth_token'=>$auth_token])</p>
+            <p class="lead">@lang('api_messages.token_string', ['auth_token'=>$authToken])</p>
         </div>
     @else
         <div id="successMessage"></div>
