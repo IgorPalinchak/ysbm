@@ -13,6 +13,8 @@ use App\ApiSettigs;
 
 class ApiDeliveryController extends Controller
 {
+    private $settigs;
+    private $guzzleClient;
 
     public function __construct(Client $client, ApiSettigs $settigs)
     {
@@ -20,14 +22,15 @@ class ApiDeliveryController extends Controller
         $this->settigs = $settigs;
     }
 
-
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        if (!empty($this->settigs->all()->toArray()) && session('api_auth_token')) {
-            $settigsData = $this->settigs->all()->toArray()['0'];
+       $sessionInDb =  $this->settigs->where('token_data', session('api_auth_token'))
+            ->get();
+        if (!empty($sessionInDb->toArray())) {
+            $settigsData = $sessionInDb->toArray()['0']['token_data'];
             $authToken = session('api_auth_token');
             return view('api/settings', compact(['settigsData', 'authToken']));
         } else {
@@ -50,7 +53,6 @@ class ApiDeliveryController extends Controller
             return view('api.errors', ['errors' => $validator->getMessageBag()->toArray()]);
         } else {
             $api_url = config('app.ysbm_api_url');
-
             try {
                 $response = $this->guzzleClient->post($api_url . 'login', [
                     'headers' => [
@@ -69,27 +71,27 @@ class ApiDeliveryController extends Controller
 
                     $existinLoginData = $this->settigs->all()->firstWhere('login', 'like', $request->inputEmail);
 
-                    if($existinLoginData == null){
+                    if ($existinLoginData == null) {
                         $this->settigs->login = $request->inputEmail;
                         $this->settigs->password = $request->inputPassword;
                         $this->settigs->token_data = $token;
                         $this->settigs->saveOrFail();
-                    }else{
-//                        dd($existinLoginData->update($request->all()));
-                        $existinLoginData->offsetSet('token_data',
-                            $token);
 
+                    } else {
+                        $this->settigs
+                            ->where('login', $request->inputEmail)
+                            ->update([
+                            'password' => $request->inputPassword,
+                            'token_data'=>$token
+                            ]);
                     }
-
                     session(['api_auth_token' => $token]);
                     return view('api.success', ['success' => Lang::get('api_messages.token_reseived', ['auth_token' => $token])]);
                 }
-
             } catch (GuzzleException $e) {
                 return view('api.errors', ['errors' => [[Lang::get('api_messages.guzle_access_error') . $e->getCode()]]]);
             }
         }
     }
-
 
 }
